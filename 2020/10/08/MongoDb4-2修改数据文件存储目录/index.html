@@ -6,18 +6,18 @@
 <blockquote>
 <p>某些情况下，mongod 停止失败，可以使用kill命令强制结束进程</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y net-toolsnetstat -tlnp | grep 27017</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install -y net-toolsnetstat -tlnp | grep 27017</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>tcp 0 0 192.168.1.246:27017 0.0.0.0:* LISTEN 13374/mongod</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill 13374</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kill 13374</span><br></pre></td></tr></table></figure>
 
 <p><em>4. 修改配置文件</em><br><code>vim /etc/mongod.conf</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">where</span> to write logging data.</span></span><br><span class="line">systemLog:</span><br><span class="line">  destination: file</span><br><span class="line">  logAppend: true</span><br><span class="line">  path: /home/mongo/log/mongod.log</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Where and how to store data.</span></span><br><span class="line">storage:</span><br><span class="line">  dbPath: /home/mongo/data</span><br><span class="line">  journal:</span><br><span class="line">    enabled: true</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">where</span> to write logging data.</span></span><br><span class="line">systemLog:</span><br><span class="line">  destination: file</span><br><span class="line">  logAppend: true</span><br><span class="line">  path: /home/mongo/log/mongod.log</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Where and how to store data.</span></span><br><span class="line">storage:</span><br><span class="line">  dbPath: /home/mongo/data</span><br><span class="line">  journal:</span><br><span class="line">    enabled: true</span><br></pre></td></tr></table></figure>
 
 <p><em>5.创建新目录并修改权限</em></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p &#x2F;home&#x2F;mongo&#x2F;log</span><br><span class="line">mkdir -p &#x2F;home&#x2F;mongo&#x2F;data</span><br><span class="line"></span><br><span class="line">chown -R mongod:mongod &#x2F;home&#x2F;mongo</span><br><span class="line">chmod  -R 0777 &#x2F;home&#x2F;mongo</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p &#x2F;home&#x2F;mongo&#x2F;log</span><br><span class="line">mkdir -p &#x2F;home&#x2F;mongo&#x2F;data</span><br><span class="line"></span><br><span class="line">chown -R mongod:mongod &#x2F;home&#x2F;mongo</span><br><span class="line">chmod  -R 0777 &#x2F;home&#x2F;mongo</span><br></pre></td></tr></table></figure>
 
 <p><em>6.启动Mongo</em><br><code>systemctl start mongod.service</code></p>
 <p><em>7.使用mongorestore 恢复数据</em><br><code>mongorestore -h 127.0.0.1 -d 集合名 备份目录</code></p>
